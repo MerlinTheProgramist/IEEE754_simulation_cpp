@@ -404,8 +404,6 @@ constexpr cls float_class(const Float32 a){
     return result;
 }
 
-
-
 constexpr Float32 scaleB(const Float32 x, const int32_t N){
   if(N==0 || is_inf(x) || is_nan(x) || is_zero(x))
     return x;
@@ -576,7 +574,6 @@ constexpr bool total_order(const Float32 a, const Float32 b){
 	if(a == b)
 		return true;
 	//1) and 2)
-	//if(is_Zero(a) && is_Zero(b)) ; not needed since if qeq() == true but a != b then they must be zeros of different sign
 	return is_sign_minus(a);
 }
 
@@ -609,9 +606,6 @@ constexpr Float32 max_val(const Float32 a, const Float32 b){
 
   return qgr(a,b)? a : b;
 }
-// constexpr Float32 reminder(const Float32, const Float32){}
-
-
 
 constexpr Float32 
     Float32::ZERO = Float32{0},
@@ -630,7 +624,3 @@ constexpr bool operator==(const float a, const Float32 b){
 constexpr bool operator!=(const float a, const Float32 b){
   return !(a == b);
 }
-
-
-
-

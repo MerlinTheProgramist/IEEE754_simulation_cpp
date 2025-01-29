@@ -140,8 +140,6 @@ struct Float32{
   }
 
   constexpr uint16_t get_exponent() const{
-    // if(((bits >> Float32::EXPONENT_OFFSET) & bit_mask<uint16_t>(Float32::EXPONENT_SIZE)) == 0)
-    //   return 0;
     return (static_cast<uint16_t>(bits >> Float32::EXPONENT_OFFSET) & bit_mask<uint16_t>(Float32::EXPONENT_SIZE))
            + Float32::BIAS - Float32::EXPONENT_BIAS;
   }
@@ -168,12 +166,6 @@ constexpr IEEEFields unpack(Float32 f){
     .exponent=f.get_exponent(),
     .mantissa=f.get_mantissa()
   };
-
-  // std::cout << (fields.exponent-Float32::BIAS+Float32::EXPONENT_BIAS) << std::endl;
-  // if(fields.exponent-Float32::BIAS+Float32::EXPONENT_BIAS == bit_mask<uint16_t>(Float32::EXPONENT_SIZE)){
-  //   fields.exponent = bit_mask<uint16_t>(Float32::EXPONENT_SIZE);
-  //   return fields;
-  // }
 
   // if exponent equals zero
   if(fields.exponent == Float32::BIAS - Float32::EXPONENT_BIAS){
@@ -231,12 +223,6 @@ constexpr Float32 pack(const IEEEFields fields){
   	return {((sign_bit & 1)  << Float32::SIGN_OFFSET)
   	     | (((exponent - Float32::BIAS + Float32::EXPONENT_BIAS) & bit_mask<uint32_t>(Float32::EXPONENT_SIZE)) << Float32::EXPONENT_OFFSET)
   	     | (  mantissa & bit_mask<uint32_t>(Float32::MANTISSA_SIZE))};
-
-
-  // return Float32{.bits=(fields.sign_bit << (Float32::SIGN_OFFSET))
-  //   | ((static_cast<uint32_t>(fields.exponent + Float32::EXPONENT_BIAS) & bit_mask<uint32_t>(Float32::EXPONENT_SIZE)) << Float32::EXPONENT_OFFSET)
-  //   | ((fields.mantissa & bit_mask<uint32_t>(Float32::MANTISSA_SIZE)) << Float32::MANTISSA_OFFSET)
-  //   };
 }
 
 static_assert(Float32::TOTAL_SIZE == sizeof(Float32)*8);
@@ -250,8 +236,6 @@ constexpr Float32 convert_from_int(T i){
   if(i == 0) 
     return Float32::ZERO;
   
-  // constexpr size_t INT_SIZE = 8*sizeof(T);
-
   bool sign = i<0;
   i = std::abs(i);
   
@@ -305,3 +289,4 @@ constexpr T round_to_int(const Float32 fa){
 
   return a.sign_bit ? -(mantissa) : mantissa;
 }
+
